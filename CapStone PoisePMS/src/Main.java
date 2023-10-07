@@ -8,12 +8,27 @@ import java.util.*;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		Scanner x = new Scanner(System.in);
 		System.out.println("What would you like to work with?\n1 - Projects\n2 - Architects\n3 - Contractors\n4 - Customers\n5 - View projects\n0 - Exit");
 		String input = x.nextLine();
 		
-		menu(x, input);
+		Connection connection = null;
+		Statement statement = null;
+		try {
+			connection = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
+					"testadmin",
+					"test101"
+			);
+			
+			statement = connection.createStatement();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		menu(x, input, connection, statement);
 		x.close();
 
 	}
@@ -23,95 +38,95 @@ public class Main {
 	 * Method allows for user to access any information of their
 	 * choice and update or delete it
 	 */
-	private static void menu(Scanner x, String input) {
+	private static void menu(Scanner x, String input, Connection connection, Statement statement) throws SQLException {
 		//allows the use to choose what it is they are trying to work with and provides
 		//necessary methods to accomplish that
 		if(input.equals("Projects") || input.equals("1")){
 			System.out.println("what would you like to do with the projects?\n1 - Enter new project\n2 - Update existing project\n3 - Delete project");
 			String answer = x.nextLine();
 			if(answer.equals("Enter new project") || answer.equals("1")) {
-				enterProject(x);
+				enterProject(x,connection, statement);
 			}
 			else if(answer.equals("Update existing project") || answer.equals("2")) {
-				updateExistingProj(x);
+				updateExistingProj(x, connection, statement);
 			}
 			else if(answer.equals("Delete project") || answer.equals("3")) {
-				deleteProject(x);
+				deleteProject(x,  connection, statement);
 			}
 			
 			System.out.println("What would you like to work with?\n1 - Projects\n2 - Architects\n3 - Contractors\n4 - Customers\n5 - View projects\n0 - Exit");
 			String input2 = x.nextLine();
-			menu(x, input2);
+			menu(x, input2, connection, statement);
 		}
 		else if(input.equals("Architects") || input.equals("2")) {
 			System.out.println("what would you like to do with the Architects?\n1 - Enter new architect\n2 - Update existing architect\n3 - Delete architect");
 			String answer = x.nextLine();
 			if(answer.equals("Enter new architect") || answer.equals("1")) {
-				enterArchitect(x);
+				enterArchitect(x, connection, statement);
 				
 				System.out.println("What would you like to work with?\n1 - Projects\n2 - Architects\n3 - Contractors\n4 - Customers\n5 - View projects\n0 - Exit");
 				String input2 = x.nextLine();
-				menu(x, input2);
+				menu(x, input2, connection, statement);
 			}
 			else if(answer.equals("Update existing architect") || answer.equals("2")) {
-				updateExistingArchitect(x);
+				updateExistingArchitect(x, connection, statement);
 			}
 			else if(answer.equals("Delete architect") || answer.equals("3")) {
-				deleteArchitect(x);
+				deleteArchitect(x, connection, statement);
 				
 				System.out.println("What would you like to work with?\n1 - Projects\n2 - Architects\n3 - Contractors\n4 - Customers\n5 - View projects\n0 - Exit");
 				String input2 = x.nextLine();
-				menu(x, input2);
+				menu(x, input2, connection, statement);
 			}
 		}
 		else if(input.equals("Contractors") || input.equals("3")) {
 			System.out.println("what would you like to do with the Contractors?\n1 - Enter new contractor\n2 - Update existing contractor\n3 - Delete contractor");
 			String answer = x.nextLine();
 			if(answer.equals("Enter new contractor") || answer.equals("1")) {
-				enterContractor(x);
+				enterContractor(x, connection, statement);
 				
 				System.out.println("What would you like to work with?\n1 - Projects\n2 - Architects\n3 - Contractors\n4 - Customers\n5 - View projects\n0 - Exit");
 				String input2 = x.nextLine();
-				menu(x, input2);
+				menu(x, input2, connection, statement);
 			}
 			else if(answer.equals("Update existing contractor") || answer.equals("2")) {
-				updateExistingContractor(x);
+				updateExistingContractor(x, connection, statement);
 				
 				System.out.println("What would you like to work with?\n1 - Projects\n2 - Architects\n3 - Contractors\n4 - Customers\n5 - View projects\n0 - Exit");
 				String input2 = x.nextLine();
-				menu(x, input2);
+				menu(x, input2, connection, statement);
 			}
 			else if(answer.equals("Delete contractor") || answer.equals("3")) {
-				deleteContractor(x);
+				deleteContractor(x, connection, statement);
 				
 				System.out.println("What would you like to work with?\n1 - Projects\n2 - Architects\n3 - Contractors\n4 - Customers\n5 - View projects\n0 - Exit");
 				String input2 = x.nextLine();
-				menu(x, input2);
+				menu(x, input2, connection, statement);
 			}
 		}
 		else if(input.equals("Customers") || input.equals("4")) {
-			System.out.println("what would you like to do with the customers?\nEnter new customers\nUpdate existing customers\n Delete customers");
+			System.out.println("what would you like to do with the customers?\n1 - Enter new customers\n2 - Update existing customers\n3 - Delete customers");
 			String answer = x.nextLine();
 			if(answer.equals("Enter new customer") || answer.equals("1")) {
-				enterCustomer(x);
+				enterCustomer(x, connection, statement);
 				
 				System.out.println("What would you like to work with?\n1 - Projects\n2 - Architects\n3 - Contractors\n4 - Customers\n5 - View projects\n0 - Exit");
 				String input2 = x.nextLine();
-				menu(x, input2);
+				menu(x, input2, connection, statement);
 			}
 			else if(answer.equals("Update existing customer") || answer.equals("2")) {
-				updateExistingCustomer(x);
+				updateExistingCustomer(x, connection, statement);
 				
 				System.out.println("What would you like to work with?\n1 - Projects\n2 - Architects\n3 - Contractors\n4 - Customers\n5 - View projects\n0 - Exit");
 				String input2 = x.nextLine();
-				menu(x, input2);
+				menu(x, input2, connection, statement);
 			}
 			else if(answer.equals("Delete customer") || answer.equals("3")) {
-				deleteCustomer(x);
+				deleteCustomer(x, connection, statement);
 				
 				System.out.println("What would you like to work with?\n1 - Projects\n2 - Architects\n3 - Contractors\n4 - Customers\n5 - View projects\n0 - Exit");
 				String input2 = x.nextLine();
-				menu(x, input2);
+				menu(x, input2, connection, statement);
 			}
 		}
 		else if(input.equals("View projects") || input.equals("5")) {
@@ -119,13 +134,13 @@ public class Main {
 			String answer = x.nextLine();
 			
 			if(answer.equals("View incomplete projects") || answer.equals("1")) {
-				viewIncompleteProjects();
+				viewIncompleteProjects(connection, statement);
 			}
 			else if(answer.equals("View projects past due dates") || answer.equals("2")) {
-				projectsPastDueDate();
+				projectsPastDueDate(connection, statement);
 			}
 			else if(answer.equals("View any project") || answer.equals("3")) {
-				viewAnyProject(x);
+				viewAnyProject(x, connection, statement);
 			}
 			
 			
@@ -142,7 +157,7 @@ public class Main {
 	 * enterProject method allows for user to input new projects
 	 * into the project table in the database
 	 */
-	public static void enterProject(Scanner x) {
+	public static void enterProject(Scanner x, Connection connection, Statement statement) throws SQLException{
 		//holds values for new projects
 		System.out.println("What is the Project id number?");
 		int projNum = Integer.parseInt(x.nextLine());
@@ -168,220 +183,124 @@ public class Main {
 		System.out.println("When is the project deadline? in the format : yyyy-mm-dd");
 		String projDeadLine = x.nextLine();
 		
-		System.out.println("Who is the project manager?");
-		String projManager = x.nextLine();
+		System.out.println("What is the project contractor's id number?");
+		int projContractor = Integer.parseInt(x.nextLine());
 		
-		System.out.println("Who is the project architect?");
-		String projArchitect = x.nextLine();
+		System.out.println("What is the project architect's id number?");
+		int projArchitect = Integer.parseInt(x.nextLine());
 		
-		System.out.println("Name and surname of customer of the project.");
-		String projCustomer = x.nextLine();
+		System.out.println("What is the customer's id number");
+		int projCustomer = Integer.parseInt(x.nextLine());
 		
 		//if the project is not given a name it will take on the name of the
-		//bulding type and surname of the customer
+		//bulding type and customer id
 		if(projName.equals("")) {
-			String[] str = projCustomer.split(" ");
-			projName = buildingType + " " + str[1];
+			projName = buildingType + " " + projCustomer;
 		}
+
+		int rowsAffected;
 		
-		try {
-			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-					"otheruser",
-					"testpassword"
-			);
+		//uses above values to create a new project 
+		rowsAffected = statement.executeUpdate(
+				"INSERT INTO projects (proj_num, proj_name, building_type, proj_address, erf_num, total_fee, amount_paid_to_date, proj_deadline, proj_contractor,proj_architect,proj_customer) VALUES (" 
+				+ projNum +"," +"\'"+ projName +"\'"+","+ "\'" + buildingType+ "\'" + ", " + "\'" + projAddress + "\'" + ","+ erfNum +","+ totalFee + "," + amountPaidToDate + "," + "\'" +
+				projDeadLine + "\'" +","+ projContractor +","+  projArchitect +","+ projCustomer + ");"
+		);
+		System.out.println("Project added, " + rowsAffected + "rows affected");
 			
-			Statement statement = connection.createStatement();
-			int rowsAffected;
-			
-			//uses above values to create a new project 
-			rowsAffected = statement.executeUpdate(
-					"INSERT INTO projects VALUES (" + projNum +"," +"\'"+ projName +"\'"+","+ "\'" + buildingType+ "\'"
-					+ ", " + "\'" + projAddress + "\'" + ","+ erfNum +","+ totalFee + "," + amountPaidToDate + "," + "\'" +
-					projDeadLine + "\'" +","+ "\'"+ projManager +"\'"+","+"\'"+ projArchitect+"\'"+","+ "\'"+ projCustomer+ "\'" + ", 'Incomplete', NULL);"
-			);
-			System.out.println("Project added, " + rowsAffected + "rows affected");
-			
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/**
 	 * updateExistingProject allows the use to update their project in any way
 	 * and mark their project as complete
 	 */
-	public static void updateExistingProj(Scanner x) {
+	public static void updateExistingProj(Scanner x, Connection connection, Statement statement) throws SQLException{
 		System.out.println("Please input the id number of the project you would like to update.");
 		int id = Integer.parseInt(x.nextLine());
 		
 		System.out.println("What would you like to update?\n1 - Project ID number\n2 - Project name\n3 - Building Type\n4 - Project address\n5 - ERF number\n6 -Total project fee"
-				+"\n7 - Amount paid to date\n8 - project deadline in the format: yyyy-mm-dd\n9 - Project manager\n10 - Project Architect\n11 - Project customer\n12 - Project finalisation");
+				+"\n7 - Amount paid to date\n8 - project deadline in the format: yyyy-mm-dd\n9 - Project Contractor\n10 - Project Architect\n11 - Project customer\n12 - Project finalisation");
 		String change = x.nextLine();
 		//changes the projec id number
 		if(change.equals("Project ID number") || change.equals("1")) {
 			System.out.println("What would you like to change it to?");
 			int newId = Integer.parseInt(x.nextLine());
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
 						"UPDATE projects SET proj_num = " + newId + " WHERE proj_num = " + id + ";"
 				);
 				System.out.println("Project updated, " + rowsAffected + "rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
+
 		}
 		//changes project name 
 		else if(change.equals("Project name") || change.equals("2")) {
 			System.out.println("What would you like to change it to?");
 			String newName = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
 						"UPDATE projects SET proj_name = " +"\'"+ newName +"\'"+ " WHERE proj_num = " + id + ";"
 				);
 				System.out.println("Project updated, " + rowsAffected + "rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		//changes the building type
 		else if(change.equals("Building type") || change.equals("3")) {
 			System.out.println("What would you like to change it to?");
 			String buildingType = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
 						"UPDATE projects SET building_type = " +"\'"+ buildingType +"\'"+ " WHERE proj_num = " + id + ";"
 				);
 				System.out.println("Project updated, " + rowsAffected + "rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		//changes projects address
 		else if(change.equals("Project address") || change.equals("4")) {
 			System.out.println("What would you like to change it to?");
 			String projAddress = x.nextLine();
 			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
 						"UPDATE projects SET proj_address = " +"\'"+ projAddress +"\'"+ " WHERE proj_num = " + id + ";"
 				);
 				System.out.println("Project updated, " + rowsAffected + "rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
+
 		}
 		//changes projects ERF number
 		else if(change.equals("ERF number") || change.equals("5")) {
 			System.out.println("What would you like to change it to?");
 			int erfNum = Integer.parseInt(x.nextLine());
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
 						"UPDATE projects SET erf_num = " + erfNum + " WHERE proj_num = " + id + ";"
 				);
 				System.out.println("Project updated, " + rowsAffected + "rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		//changes total project fee
 		else if(change.equals("Total project fee") || change.equals("6")) {
 			System.out.println("What would you like to change it to?");
 			int totalFee = Integer.parseInt(x.nextLine());
 			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
 						"UPDATE projects SET total_fee = " + totalFee + " WHERE proj_num = " + id + ";"
 				);
 				System.out.println("Project updated, " + rowsAffected + "rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		//changes amount paid to date
 		else if(change.equals("Amount paid to date") || change.equals("7")) {
 			System.out.println("What would you like to change it to?");
 			int amountPaidToDate = Integer.parseInt(x.nextLine());
 			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+	
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
@@ -389,24 +308,13 @@ public class Main {
 				);
 				System.out.println("Project updated, " + rowsAffected + "rows affected");
 				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
+	
 		}
-		//changes project manager
+		//changes project deadline
 		else if(change.equals("Project deadline") || change.equals("8")) {
 			System.out.println("What would you like to change it to?");
 			String projDeadLine = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
@@ -414,85 +322,46 @@ public class Main {
 				);
 				System.out.println("Project updated, " + rowsAffected + "rows affected");
 				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
+	
 		}
-		//changes project manager
-		else if(change.equals("Project manager") || change.equals("9")) {
-			System.out.println("Who would you like to change them to?");
-			String projManager = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+		//changes project contractor
+		else if(change.equals("Project Contractor") || change.equals("9")) {
+			System.out.println("What is the id number or the contractor you would like to change to?");
+			int projContractor = Integer.parseInt(x.nextLine());
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
-						"UPDATE projects SET proj_manager = " +"\'"+ projManager +"\'"+ " WHERE proj_num = " + id + ";"
+						"UPDATE projects SET proj_manager = " +"\'"+ projContractor +"\'"+ " WHERE proj_num = " + id + ";"
 				);
 				System.out.println("Project updated, " + rowsAffected + "rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
+
 		}
 		//changes the project architect
 		else if(change.equals("Project Architect") || change.equals("10")) {
-			System.out.println("Who would you like to change them to?");
-			String projArchitect = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+			System.out.println("What is the id number or the architect you would like to change to?");
+			int projArchitect =  Integer.parseInt(x.nextLine());
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
 						"UPDATE projects SET proj_architect = " +"\'"+ projArchitect +"\'"+ " WHERE proj_num = " + id + ";"
 				);
 				System.out.println("Project updated, " + rowsAffected + "rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
+
 		}
 		//changes the project customer
 		else if(change.equals("Project customer") || change.equals("11")) {
-			System.out.println("Who would you like to change them to?");
-			String projCustomer = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+			System.out.println("What is the id number or the customer you would like to change to?");
+			int projCustomer =  Integer.parseInt(x.nextLine());
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
 						"UPDATE projects SET proj_customer = " +"\'"+ projCustomer +"\'"+ " WHERE proj_num = " + id + ";"
 				);
 				System.out.println("Project updated, " + rowsAffected + "rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
+
 		}
 		//marks project complete and gets date of its completion
 		else if(change.equals("Project finalisation") || change.equals("12")) {
@@ -500,16 +369,9 @@ public class Main {
 			String completeOrNot = x.nextLine();
 			
 			if(completeOrNot.equals("Complete")) {
-				System.out.println("Please input the projects dates of completion inf the format: yyyy-mm-dd");
+				System.out.println("Please input the projects dates of completion in the format: yyyy-mm-dd");
 				String date = x.nextLine();
-				try {
-					Connection connection = DriverManager.getConnection(
-							"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-							"otheruser",
-							"testpassword"
-					);
-					
-					Statement statement = connection.createStatement();
+
 					int rowsAffected;
 					
 					rowsAffected = statement.executeUpdate(
@@ -522,23 +384,10 @@ public class Main {
 					);
 					System.out.println("Project completion updated, " + rowsAffected + "rows affected");
 					System.out.println("Congratulations on completing your project!");
-					
-					
-				}
-				catch(SQLException e) {
-					e.printStackTrace();
-				}
 			}
 			//marks project incomplete
 			else if(completeOrNot.equals("Incomplete")) {
-				try {
-					Connection connection = DriverManager.getConnection(
-							"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-							"otheruser",
-							"testpassword"
-					);
-					
-					Statement statement = connection.createStatement();
+
 					int rowsAffected;
 					
 					rowsAffected = statement.executeUpdate(
@@ -550,11 +399,7 @@ public class Main {
 							"UPDATE projects SET proj_completion_date = NULL WHERE proj_num = " + id + ";"
 					);
 					System.out.println("Project completion updated, " + rowsAffected + "rows affected");
-					
-				}
-				catch(SQLException e) {
-					e.printStackTrace();
-				}
+
 			}
 			
 		}
@@ -566,18 +411,10 @@ public class Main {
 	 * deleteProjects removes the project from the database 
 	 * and anyone that was involved in the project is removed aswell
 	 */
-	public static void deleteProject(Scanner x) {
+	public static void deleteProject(Scanner x, Connection connection, Statement statement) throws SQLException{
 		System.out.println("Please input the id of the project you want to delete");
 		int projNum = Integer.parseInt(x.nextLine());
 		
-		try {
-			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-					"otheruser",
-					"testpassword"
-			);
-			
-			Statement statement = connection.createStatement();
 			int rowsAffected;
 			ResultSet results;
 			
@@ -587,13 +424,13 @@ public class Main {
 			);
 			
 			//holds values of everyone involved in project 
-			String contractor = "";
-			String architect = "";
-			String customer = "";
+			int contractor = 0;
+			int architect = 0;
+			int customer = 0;
 			while(results.next()) {
-				contractor = results.getString("proj_manager");
-				architect = results.getString("proj_architect");
-				customer = results.getString("proj_customer");
+				contractor = results.getInt("proj_manager");
+				architect = results.getInt("proj_architect");
+				customer = results.getInt("proj_customer");
 			}
 			
 			//removes everyone that was involved in the project from the
@@ -611,170 +448,118 @@ public class Main {
 			rowsAffected = statement.executeUpdate(
 					"DELETE FROM contractor WHERE name = " +"\'"+ contractor +"\'"+ ";"
 			);
-			System.out.println("Project manager removed, " + rowsAffected + "rows affected");
+			System.out.println("Project contractor removed, " + rowsAffected + "rows affected");
 			
 			rowsAffected = statement.executeUpdate(
 					"DELETE FROM projects WHERE proj_num = " + projNum + ";"
 			);
 			System.out.println("Project deleted, " + rowsAffected + "rows affected");
-			
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
+
 	}
 	
 	/**
 	 * enterArchitect method allows for user to input new architects
 	 * into the database
 	 */
-	public static void enterArchitect(Scanner x) {
+	public static void enterArchitect(Scanner x, Connection connection, Statement statement) throws SQLException{
 		//holds values for new architect
+		System.out.println("What is the architects id number?");
+		int id = Integer.parseInt(x.nextLine());
+		
 		System.out.println("What is the architects name?");
 		String name = x.nextLine();
 		
 		System.out.println("What is the architects telephone number?");
-		String teleNum = x.nextLine();
+		int teleNum = Integer.parseInt(x.nextLine());
 		
 		System.out.println("What is the architects email address");
 		String emailAddress = x.nextLine();
 		
 		System.out.println("What is the architects physical address?");
 		String physicalAddress = x.nextLine();
-	
-		
-		try {
-			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-					"otheruser",
-					"testpassword"
-			);
-			
-			Statement statement = connection.createStatement();
+
 			int rowsAffected;
 			
 			//create new architect with above values
 			rowsAffected = statement.executeUpdate(
-					"INSERT INTO architect VALUES ( " + "\'"+ name +"\'"+","+ "\'" + teleNum+ "\'" + "," + "\'" + emailAddress + "\'" +
-					","+ "\'"+ physicalAddress +"\'" +");"
+					"INSERT INTO architect VALUES ("+ id +","+ "\'"+ name +"\'"+","+ teleNum + "," + "\'" + emailAddress + "\'" +
+					","+ "\'"+ physicalAddress +"');"
 			);
 			System.out.println("Architect added, " + rowsAffected + "rows affected");
-			
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/**
 	 * updateExistingArchitect allows the use to update any information 
 	 * about their architect
 	 */
-	public static void updateExistingArchitect(Scanner x) {
-		System.out.println("Please input the name of the architect you would like to update.");
-		String name = x.nextLine();
+	public static void updateExistingArchitect(Scanner x, Connection connection, Statement statement) throws SQLException{
+		System.out.println("Please input the id of the architect you would like to update.");
+		int id = Integer.parseInt(x.nextLine());
 		
-		System.out.println("What would you like to update?\n1 - Architects name\n2 - Architects telephone number\n3 - Architects email address\n4 - Architects physical address");
+		System.out.println("What would you like to update?\n1 - Architects id\n2 - Architects name\n3 - Architects telephone number\n4 - Architects email address\n5 - Architects physical address");
 		String change = x.nextLine();
-		//changes architects names
-		if(change.equals("Architects name") || change.equals("1")) {
+		
+		if(change.equals("Architects id") || change.equals("1")) {
 			System.out.println("What would you like to change it to?");
-			String newName = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+			int newId = Integer.parseInt(x.nextLine());
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
-						"UPDATE architect SET name = " +"\'"+ newName +"\'"+ " WHERE name = " +"\'"+ name +"\'"+ ";"
+						"UPDATE architect SET id = " + newId + " WHERE id = " + id + ";"
 				);
 				System.out.println("Architects name updated, " + rowsAffected + " rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
 		}
-		//changes architects telephone number
-		else if(change.equals("Architects telephone number") || change.equals("2")) {
+		//changes architects names
+		else if(change.equals("Architects name") || change.equals("2")) {
 			System.out.println("What would you like to change it to?");
-			String teleNum = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+			String newName = x.nextLine();
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
-						"UPDATE architect SET tele_num = " +"\'"+ teleNum +"\'"+ " WHERE name = " +"\'"+ name +"\'"+ ";"
+						"UPDATE architect SET name = " +"\'"+ newName +"\'"+ " WHERE id = " + id + ";" 
+				);
+				System.out.println("Architects name updated, " + rowsAffected + " rows affected");
+		}
+		//changes architects telephone number
+		else if(change.equals("Architects telephone number") || change.equals("3")) {
+			System.out.println("What would you like to change it to?");
+			String teleNum = x.nextLine();
+
+				int rowsAffected;
+				
+				rowsAffected = statement.executeUpdate(
+						"UPDATE architect SET tele_num = " +"\'"+ teleNum +"\'"+ " WHERE id = " + id + ";"
 				);
 				System.out.println("Architects telephone number updated, " + rowsAffected + " rows affected");
 				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		//changes architects email address
-		else if(change.equals("Architects email address") || change.equals("3")) {
+		else if(change.equals("Architects email address") || change.equals("4")) {
 			System.out.println("What would you like to change it to?");
 			String emailAddress = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
-						"UPDATE architect SET email_address = " +"\'"+ emailAddress +"\'"+ " WHERE name = " +"\'"+ name +"\'"+ ";"
+						"UPDATE architect SET email_address = " +"\'"+ emailAddress +"\'"+ " WHERE id = " + id + ";"
 				);
 				System.out.println("Architects email address updated, " + rowsAffected + " rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
+
 		}
 		//changes architects address
-		else if(change.equals("Architects physical address") || change.equals("4")) {
+		else if(change.equals("Architects physical address") || change.equals("5")) {
 			System.out.println("What would you like to change it to?");
 			String physicalAddress = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+		
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
-						"UPDATE architect SET physical_address = " +"\'"+ physicalAddress +"\'"+ " WHERE name = " +"\'"+ name +"\'"+ ";"
+						"UPDATE architect SET physical_address = " +"\'"+ physicalAddress +"\'"+ " WHERE id = " + id + ";"
 				);
 				System.out.println("Architects address updated, " + rowsAffected + " rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
+
 		}
 	}
 	
@@ -782,184 +567,122 @@ public class Main {
 	 * deleteArchitect removes the architect from the 
 	 * architect table
 	 */
-	public static void deleteArchitect(Scanner x) {
-		System.out.println("Please input the name of the architect you want to remove");
-		String name = x.nextLine();
+	public static void deleteArchitect(Scanner x, Connection connection, Statement statement) throws SQLException {
+		System.out.println("Please input the id of the architect you want to remove");
+		int id = Integer.parseInt(x.nextLine());
 		
-		try {
-			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-					"otheruser",
-					"testpassword"
-			);
-			
-			Statement statement = connection.createStatement();
 			int rowsAffected;
 			
 			//removes architect with that specific name from table
 			rowsAffected = statement.executeUpdate(
-					"DELETE FROM architect WHERE name = " + "\'"+ name + "\'"+ ";"
+					"DELETE FROM architect WHERE id = " + id + ";"
 			);
 			System.out.println("Architect removed, " + rowsAffected + "rows affected");
-			
-			
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/**
 	 * enterContractor method allows for user to input new contractors
 	 * into the database
 	 */
-	public static void enterContractor(Scanner x) {
+	public static void enterContractor(Scanner x, Connection connection, Statement statement) throws SQLException{
 		//holds values of new contractor
-		System.out.println("What is the contractors name?");
+		System.out.println("What is the contractor's id number?");
+		int id = Integer.parseInt(x.nextLine());
+		
+		System.out.println("What is the contractor's name?");
 		String name = x.nextLine();
 		
-		System.out.println("What is the contractors telephone number?");
+		System.out.println("What is the contractor's telephone number?");
 		String teleNum = x.nextLine();
 		
-		System.out.println("What is the contractors email address?");
+		System.out.println("What is the contractor's email address?");
 		String emailAddress = x.nextLine();
 		
-		System.out.println("What is the contractors physical address?");
+		System.out.println("What is the contractor's physical address?");
 		String physicalAddress = x.nextLine();
-	
 		
-		try {
-			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-					"otheruser",
-					"testpassword"
-			);
-			
-			Statement statement = connection.createStatement();
-			int rowsAffected;
-			
-			//uses above values to create a new contractor
-			rowsAffected = statement.executeUpdate(
-					"INSERT INTO contractor VALUES ( " + "\'"+ name +"\'"+","+ "\'" + teleNum+ "\'" + "," + "\'" + emailAddress + "\'" +
-					","+ "\'"+ physicalAddress +"\'" +");"
-			);
-			System.out.println("Contractor added, " + rowsAffected + "rows affected");
-			
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
+		int rowsAffected;
+		
+		//uses above values to create a new contractor
+		rowsAffected = statement.executeUpdate(
+				"INSERT INTO contractor VALUES ("+ id +","+ "\'"+ name +"\'"+","+ teleNum + "," + "\'" + emailAddress + "\'" +
+				","+ "\'"+ physicalAddress +"');"
+		);
+		System.out.println("Contractor added, " + rowsAffected + "rows affected");
 	}
 	
 	/**
 	 * updateExistingContractor allows the use to update any information 
 	 * about their contractor
 	 */
-	public static void updateExistingContractor(Scanner x) {
-		System.out.println("Please input the name of the contractor you would like to update.");
-		String name = x.nextLine();
+	public static void updateExistingContractor(Scanner x, Connection connection, Statement statement) throws SQLException{
+		System.out.println("Please input the id of the contractor you would like to update.");
+		int id = Integer.parseInt(x.nextLine());
 		
-		System.out.println("What would you like to update?\n1 - Contractors name\n2 - Contractors telephone number\n3 - Contractors email address\n4 - Contractors physical address");
+		System.out.println("What would you like to update?\n1 - Contractor id\n2 - Contractor name\n3 - Contractor telephone number\n4 - Contractor email address\n5 - Contractor physical address");
 		String change = x.nextLine();
-		//changes contractors name
-		if(change.equals("Contractors name") || change.equals("1")) {
+		
+		if(change.equals("Contractor id") || change.equals("1")) {
+			System.out.println("What would you like to change it to?");
+			int newId = Integer.parseInt(x.nextLine());
+
+				int rowsAffected;
+				
+				rowsAffected = statement.executeUpdate(
+						"UPDATE contractor SET id = " + newId + " WHERE id = " + id + ";"
+				);
+				System.out.println("Contractors name updated, " + rowsAffected + " rows affected");
+		}
+		//changes architects names
+		else if(change.equals("Contractor name") || change.equals("2")) {
 			System.out.println("What would you like to change it to?");
 			String newName = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
-						"UPDATE contractor SET name = " +"\'"+ newName +"\'"+ " WHERE name = " +"\'"+ name +"\'"+ ";"
+						"UPDATE contractor SET name = " +"\'"+ newName +"\'"+ " WHERE id = " + id + ";" 
 				);
 				System.out.println("Contractor name updated, " + rowsAffected + " rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
 		}
-		//changes contractors telephone number
-		else if(change.equals("Contractors telephone number") || change.equals("2")) {
+		//changes architects telephone number
+		else if(change.equals("Contractor telephone number") || change.equals("3")) {
 			System.out.println("What would you like to change it to?");
 			String teleNum = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
-						"UPDATE contractor SET tele_num = " +"\'"+ teleNum +"\'"+ " WHERE name = " +"\'"+ name +"\'"+ ";"
+						"UPDATE contractor SET tele_num = " +"\'"+ teleNum +"\'"+ " WHERE id = " + id + ";"
 				);
-				System.out.println("contractors telephone number updated, " + rowsAffected + " rows affected");
+				System.out.println("Contractor telephone number updated, " + rowsAffected + " rows affected");
 				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
 		}
-		//changes contractors email address
-		else if(change.equals("Contractors email address") || change.equals("3")) {
+		//changes architects email address
+		else if(change.equals("Contractor email address") || change.equals("4")) {
 			System.out.println("What would you like to change it to?");
 			String emailAddress = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
-						"UPDATE contractor SET email_address = " +"\'"+ emailAddress +"\'"+ " WHERE name = " +"\'"+ name +"\'"+ ";"
+						"UPDATE contractor SET email_address = " +"\'"+ emailAddress +"\'"+ " WHERE id = " + id + ";"
 				);
-				System.out.println("Contactors email address updated, " + rowsAffected + " rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
+				System.out.println("Contractor email address updated, " + rowsAffected + " rows affected");
+
 		}
-		//changes contractors address
-		else if(change.equals("Contractors physical address") || change.equals("4")) {
+		//changes architects address
+		else if(change.equals("Contractor physical address") || change.equals("5")) {
 			System.out.println("What would you like to change it to?");
 			String physicalAddress = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+		
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
-						"UPDATE contractor SET physical_address = " +"\'"+ physicalAddress +"\'"+ " WHERE name = " +"\'"+ name +"\'"+ ";"
+						"UPDATE contractor SET physical_address = " +"\'"+ physicalAddress +"\'"+ " WHERE id = " + id + ";"
 				);
-				System.out.println("Contractors address updated, " + rowsAffected + " rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
+				System.out.println("Contractor address updated, " + rowsAffected + " rows affected");
+
 		}
 	}
 	
@@ -967,183 +690,122 @@ public class Main {
 	 * deleteContractor removes the contractor from the 
 	 * contractor table
 	 */
-	public static void deleteContractor(Scanner x) {
-		System.out.println("Please input the name of the contractor you want to remove");
-		String name = x.nextLine();
-		
-		try {
-			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-					"otheruser",
-					"testpassword"
-			);
-			
-			Statement statement = connection.createStatement();
+	public static void deleteContractor(Scanner x, Connection connection, Statement statement) throws SQLException{
+		System.out.println("Please input the id of the contractor you want to remove");
+		int id = Integer.parseInt(x.nextLine());
+
 			int rowsAffected;
 			
 			//removes contractor with that specific name
 			rowsAffected = statement.executeUpdate(
-					"DELETE FROM contractor WHERE name = " + "\'"+ name + "\'"+ ";"
+					"DELETE FROM contractor WHERE id = " + "\'"+ id + "\'"+ ";"
 			);
 			System.out.println("Contractor removed, " + rowsAffected + "rows affected");
-			
-			
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/**
 	 * enterCustomer method allows for user to input new customer
 	 * into the database
 	 */
-	public static void enterCustomer(Scanner x) {
+	public static void enterCustomer(Scanner x, Connection connection, Statement statement) throws SQLException{
 		//holds values of new customer
-		System.out.println("What is the customers name?");
+		System.out.println("What is the customer's id number?");
+		int id = Integer.parseInt(x.nextLine());
+		
+		System.out.println("What is the customer's name?");
 		String name = x.nextLine();
 		
-		System.out.println("What is the customers telephone number?");
+		System.out.println("What is the customer's telephone number?");
 		String teleNum = x.nextLine();
 		
-		System.out.println("What is the customers email address?");
+		System.out.println("What is the customer's email address?");
 		String emailAddress = x.nextLine();
 		
-		System.out.println("What is the customers physical address?");
+		System.out.println("What is the customer's physical address?");
 		String physicalAddress = x.nextLine();
-	
 		
-		try {
-			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-					"otheruser",
-					"testpassword"
-			);
-			
-			Statement statement = connection.createStatement();
-			int rowsAffected;
-			
-			//uses above values to create a new customer with
-			rowsAffected = statement.executeUpdate(
-					"INSERT INTO customer VALUES ( " + "\'"+ name +"\'"+","+ "\'" + teleNum+ "\'" + "," + "\'" + emailAddress + "\'" +
-					","+ "\'"+ physicalAddress +"\'" +");"
-			);
-			System.out.println("Customer added, " + rowsAffected + "rows affected");
-			
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
+		int rowsAffected;
+		
+		//uses above values to create a new contractor
+		rowsAffected = statement.executeUpdate(
+				"INSERT INTO customer VALUES ("+ id +","+ "\'"+ name +"\'"+","+ teleNum + "," + "\'" + emailAddress + "\'" +
+				","+ "\'"+ physicalAddress +"');"
+		);
+		System.out.println("Customer added, " + rowsAffected + "rows affected");
 	}
 	
 	/**
 	 * updateExistingCustomer allows the use to update any information 
 	 * about their customer
 	 */
-	public static void updateExistingCustomer(Scanner x) {
-		System.out.println("Please input the name of the customer you would like to update.");
-		String name = x.nextLine();
+	public static void updateExistingCustomer(Scanner x, Connection connection, Statement statement) throws SQLException{
+		System.out.println("Please input the id of the customer you would like to update.");
+		int id = Integer.parseInt(x.nextLine());
 		
-		System.out.println("What would you like to update?\n1 - Customers name\n2 - Customers telephone number\n3 - Customers email address\n4 - Customers physical address");
+		System.out.println("What would you like to update?\n1 - Customers id\n2 - Customers name\n3 - Customers telephone number\n4 - Customers email address\n5 - Customers physical address");
 		String change = x.nextLine();
-		//changes customers name
-		if(change.equals("Customers name") || change.equals("1")) {
+		
+		if(change.equals("Customers id") || change.equals("1")) {
+			System.out.println("What would you like to change it to?");
+			int newId = Integer.parseInt(x.nextLine());
+
+				int rowsAffected;
+				
+				rowsAffected = statement.executeUpdate(
+						"UPDATE customer SET id = " + newId + " WHERE id = " + id + ";"
+				);
+				System.out.println("Customers name updated, " + rowsAffected + " rows affected");
+		}
+		//changes architects names
+		else if(change.equals("Customers name") || change.equals("2")) {
 			System.out.println("What would you like to change it to?");
 			String newName = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
-						"UPDATE customer SET name = " +"\'"+ newName +"\'"+ " WHERE name = " +"\'"+ name +"\'"+ ";"
+						"UPDATE customer SET name = " +"\'"+ newName +"\'"+ " WHERE id = " + id + ";" 
 				);
-				System.out.println("Customer name updated, " + rowsAffected + " rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
+				System.out.println("Customers name updated, " + rowsAffected + " rows affected");
 		}
-		//changes customers telephone number
-		else if(change.equals("Customers telephone number") || change.equals("2")) {
+		//changes architects telephone number
+		else if(change.equals("Customers telephone number") || change.equals("3")) {
 			System.out.println("What would you like to change it to?");
 			String teleNum = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
-						"UPDATE customer SET tele_num = " +"\'"+ teleNum +"\'"+ " WHERE name = " +"\'"+ name +"\'"+ ";"
+						"UPDATE customer SET tele_num = " +"\'"+ teleNum +"\'"+ " WHERE id = " + id + ";"
 				);
-				System.out.println("contractors telephone number updated, " + rowsAffected + " rows affected");
+				System.out.println("Customers telephone number updated, " + rowsAffected + " rows affected");
 				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
 		}
-		//changes customers email address
-		else if(change.equals("Customers email address") || change.equals("3")) {
+		//changes architects email address
+		else if(change.equals("Customers email address") || change.equals("4")) {
 			System.out.println("What would you like to change it to?");
 			String emailAddress = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
-						"UPDATE customer SET email_address = " +"\'"+ emailAddress +"\'"+ " WHERE name = " +"\'"+ name +"\'"+ ";"
+						"UPDATE customer SET email_address = " +"\'"+ emailAddress +"\'"+ " WHERE id = " + id + ";"
 				);
-				System.out.println("Customer email address updated, " + rowsAffected + " rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
+				System.out.println("Customers email address updated, " + rowsAffected + " rows affected");
+
 		}
-		else if(change.equals("Customers physical address") || change.equals("4")) {
+		//changes architects address
+		else if(change.equals("Contractor physical address") || change.equals("5")) {
 			System.out.println("What would you like to change it to?");
 			String physicalAddress = x.nextLine();
-			
-			try {
-				Connection connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-						"otheruser",
-						"testpassword"
-				);
-				
-				Statement statement = connection.createStatement();
+		
 				int rowsAffected;
 				
 				rowsAffected = statement.executeUpdate(
-						"UPDATE customer SET physical_address = " +"\'"+ physicalAddress +"\'"+ " WHERE name = " +"\'"+ name +"\'"+ ";"
+						"UPDATE customer SET physical_address = " +"\'"+ physicalAddress +"\'"+ " WHERE id = " + id + ";"
 				);
 				System.out.println("Customers address updated, " + rowsAffected + " rows affected");
-				
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
+
 		}
 	}
 	
@@ -1151,47 +813,25 @@ public class Main {
 	 * deleteContractor removes the contractor from the 
 	 * contractor table
 	 */
-	public static void deleteCustomer(Scanner x) {
-		System.out.println("Please input the name of the customer you want to remove");
-		String name = x.nextLine();
-		
-		try {
-			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-					"otheruser",
-					"testpassword"
-			);
-			
-			Statement statement = connection.createStatement();
+	public static void deleteCustomer(Scanner x, Connection connection, Statement statement) throws SQLException{
+		System.out.println("Please input the id of the customer you want to remove");
+		int id = Integer.parseInt(x.nextLine());
+
 			int rowsAffected;
 			
-			//removes customer with specified name
+			//removes contractor with that specific name
 			rowsAffected = statement.executeUpdate(
-					"DELETE FROM customer WHERE name = " + "\'"+ name + "\'"+ ";"
+					"DELETE FROM customer WHERE id = " + "\'"+ id + "\'"+ ";"
 			);
 			System.out.println("Customer removed, " + rowsAffected + "rows affected");
-			
-			
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
 	 * viewIncompleteProjects allows user to view all projects
 	 * that have not been marked down as complete
 	 */
-	public static void viewIncompleteProjects() {
-		try {
-			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-					"otheruser",
-					"testpassword"
-			);
-			
-			Statement statement = connection.createStatement();
-		
+	public static void viewIncompleteProjects(Connection connection, Statement statement) throws SQLException{
+
 			ResultSet results;
 			
 			//retrieves and projects marked as incomplete
@@ -1206,29 +846,14 @@ public class Main {
 				+ ", " + results.getString("proj_deadline") + ", " + results.getString("proj_manager") + ", " + results.getString("proj_architect") + ", " + results.getString("proj_customer")
 				+ ", " + results.getString("proj_completion") + ", " + results.getString("proj_completion_date")+ "\n\n"); 
 			}
-			
-			
-			
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
 	 * projectsPastDueDate allows user to view all projects
 	 * that have not been completed on the allocated time
 	 */
-	public static void projectsPastDueDate() {
-		try {
-			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-					"otheruser",
-					"testpassword"
-			);
-			
-			Statement statement = connection.createStatement();
-		
+	public static void projectsPastDueDate(Connection connection, Statement statement) throws SQLException{
+
 			ResultSet results;
 			
 			//compares projects with current date and returns projects past their due date
@@ -1244,30 +869,16 @@ public class Main {
 				+ ", " + results.getString("proj_completion") + ", " + results.getString("proj_completion_date")+ "\n\n"); 
 			}
 			
-			
-			
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/**
 	 * viewAnyProject allows user to view any project of their 
 	 * choice through the project name or project number 
 	 */
-	public static void viewAnyProject(Scanner x) {
+	public static void viewAnyProject(Scanner x, Connection connection, Statement statement) throws SQLException {
 		System.out.println("Please input the project number or name");
 		String answer = x.nextLine();
-		try {
-			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/poisepms?useSSL=false",
-					"otheruser",
-					"testpassword"
-			);
-			
-			Statement statement = connection.createStatement();
-		
+
 			ResultSet results;
 			
 			//retrieves any project that has that name or project number
@@ -1285,10 +896,7 @@ public class Main {
 			
 			
 			
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
+		
 	}
 }
 	

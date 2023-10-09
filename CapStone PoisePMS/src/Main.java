@@ -10,6 +10,7 @@ public class Main {
 
 	public static void main(String[] args) throws SQLException {
 		Scanner x = new Scanner(System.in);
+		System.out.println("Please remember to only assign one person in each project, dont repeat persons otherwise you may break the program");
 		System.out.println("What would you like to work with?\n1 - Projects\n2 - Architects\n3 - Contractors\n4 - Customers\n5 - View projects\n0 - Exit");
 		String input = x.nextLine();
 		
@@ -159,9 +160,6 @@ public class Main {
 	 */
 	public static void enterProject(Scanner x, Connection connection, Statement statement) throws SQLException{
 		//holds values for new projects
-		System.out.println("What is the Project id number?");
-		int projNum = Integer.parseInt(x.nextLine());
-		
 		System.out.println("What is the Project name?");
 		String projName = x.nextLine();
 		
@@ -202,8 +200,9 @@ public class Main {
 		
 		//uses above values to create a new project 
 		rowsAffected = statement.executeUpdate(
-				"INSERT INTO projects (proj_num, proj_name, building_type, proj_address, erf_num, total_fee, amount_paid_to_date, proj_deadline, proj_contractor,proj_architect,proj_customer) VALUES (" 
-				+ projNum +"," +"\'"+ projName +"\'"+","+ "\'" + buildingType+ "\'" + ", " + "\'" + projAddress + "\'" + ","+ erfNum +","+ totalFee + "," + amountPaidToDate + "," + "\'" +
+				"INSERT INTO (proj_name, building_type, proj_address, erf_num, total_fee, amount_paid_to_date, proj_deadline, proj_contractor,proj_architect,proj_customer)" +
+				" projects (proj_name, building_type, proj_address, erf_num, total_fee, amount_paid_to_date, proj_deadline, proj_contractor,proj_architect,proj_customer) VALUES (" 
+				 +"\'"+ projName +"\'"+","+ "\'" + buildingType+ "\'" + ", " + "\'" + projAddress + "\'" + ","+ erfNum +","+ totalFee + "," + amountPaidToDate + "," + "\'" +
 				projDeadLine + "\'" +","+ projContractor +","+  projArchitect +","+ projCustomer + ");"
 		);
 		System.out.println("Project added, " + rowsAffected + "rows affected");
@@ -418,7 +417,7 @@ public class Main {
 			int rowsAffected;
 			ResultSet results;
 			
-			//retrieves project witht that specific project number
+			//retrieves project with that specific project number
 			results = statement.executeQuery(
 					"SELECT * FROM projects WHERE proj_num = " + projNum + ";"
 			);
@@ -428,32 +427,33 @@ public class Main {
 			int architect = 0;
 			int customer = 0;
 			while(results.next()) {
-				contractor = results.getInt("proj_manager");
+				contractor = results.getInt("proj_contractor");
 				architect = results.getInt("proj_architect");
 				customer = results.getInt("proj_customer");
 			}
 			
 			//removes everyone that was involved in the project from the
 			//whole database and removes the project aswell
-			rowsAffected = statement.executeUpdate(
-					"DELETE FROM customer WHERE name = " + "\'"+ customer + "\'"+ ";"
-			);
-			System.out.println("Project customer removed, " + rowsAffected + "rows affected");
-			
-			rowsAffected = statement.executeUpdate(
-					"DELETE FROM architect WHERE name = " +"\'"+ architect +"\'"+ ";"
-			);
-			System.out.println("Project architect removed, " + rowsAffected + "rows affected");
-			
-			rowsAffected = statement.executeUpdate(
-					"DELETE FROM contractor WHERE name = " +"\'"+ contractor +"\'"+ ";"
-			);
-			System.out.println("Project contractor removed, " + rowsAffected + "rows affected");
 			
 			rowsAffected = statement.executeUpdate(
 					"DELETE FROM projects WHERE proj_num = " + projNum + ";"
 			);
 			System.out.println("Project deleted, " + rowsAffected + "rows affected");
+			
+			rowsAffected = statement.executeUpdate(
+					"DELETE FROM customer WHERE id = " + "\'"+ customer + "\'"+ ";"
+			);
+			System.out.println("Project customer removed, " + rowsAffected + "rows affected");
+			
+			rowsAffected = statement.executeUpdate(
+					"DELETE FROM architect WHERE id = " +"\'"+ architect +"\'"+ ";"
+			);
+			System.out.println("Project architect removed, " + rowsAffected + "rows affected");
+			
+			rowsAffected = statement.executeUpdate(
+					"DELETE FROM contractor WHERE id = " +"\'"+ contractor +"\'"+ ";"
+			);
+			System.out.println("Project contractor removed, " + rowsAffected + "rows affected");
 
 	}
 	
@@ -463,9 +463,6 @@ public class Main {
 	 */
 	public static void enterArchitect(Scanner x, Connection connection, Statement statement) throws SQLException{
 		//holds values for new architect
-		System.out.println("What is the architects id number?");
-		int id = Integer.parseInt(x.nextLine());
-		
 		System.out.println("What is the architects name?");
 		String name = x.nextLine();
 		
@@ -482,8 +479,8 @@ public class Main {
 			
 			//create new architect with above values
 			rowsAffected = statement.executeUpdate(
-					"INSERT INTO architect VALUES ("+ id +","+ "\'"+ name +"\'"+","+ teleNum + "," + "\'" + emailAddress + "\'" +
-					","+ "\'"+ physicalAddress +"');"
+					"INSERT INTO (name, tele_num, email_address, physical_address) architect (name, tele_num, email_address, physical_address) VALUES ("+
+					"\'"+ name +"\'"+","+ teleNum + "," + "\'" + emailAddress + "\'" + ","+ "\'"+ physicalAddress +"');"
 			);
 			System.out.println("Architect added, " + rowsAffected + "rows affected");
 	}
@@ -586,9 +583,6 @@ public class Main {
 	 */
 	public static void enterContractor(Scanner x, Connection connection, Statement statement) throws SQLException{
 		//holds values of new contractor
-		System.out.println("What is the contractor's id number?");
-		int id = Integer.parseInt(x.nextLine());
-		
 		System.out.println("What is the contractor's name?");
 		String name = x.nextLine();
 		
@@ -605,8 +599,8 @@ public class Main {
 		
 		//uses above values to create a new contractor
 		rowsAffected = statement.executeUpdate(
-				"INSERT INTO contractor VALUES ("+ id +","+ "\'"+ name +"\'"+","+ teleNum + "," + "\'" + emailAddress + "\'" +
-				","+ "\'"+ physicalAddress +"');"
+				"INSERT INTO (name, tele_num, email_address, physical_address) contractor VALUES ("
+				+ "\'"+ name +"\'"+","+ teleNum + "," + "\'" + emailAddress + "\'" + ","+ "\'"+ physicalAddress +"');"
 		);
 		System.out.println("Contractor added, " + rowsAffected + "rows affected");
 	}
@@ -709,9 +703,6 @@ public class Main {
 	 */
 	public static void enterCustomer(Scanner x, Connection connection, Statement statement) throws SQLException{
 		//holds values of new customer
-		System.out.println("What is the customer's id number?");
-		int id = Integer.parseInt(x.nextLine());
-		
 		System.out.println("What is the customer's name?");
 		String name = x.nextLine();
 		
@@ -728,8 +719,8 @@ public class Main {
 		
 		//uses above values to create a new contractor
 		rowsAffected = statement.executeUpdate(
-				"INSERT INTO customer VALUES ("+ id +","+ "\'"+ name +"\'"+","+ teleNum + "," + "\'" + emailAddress + "\'" +
-				","+ "\'"+ physicalAddress +"');"
+				"INSERT INTO (name, tele_num, email_address, physical_address) customer VALUES (" +
+				"\'"+ name +"\'"+","+ teleNum + "," + "\'" + emailAddress + "\'" + ","+ "\'"+ physicalAddress +"');"
 		);
 		System.out.println("Customer added, " + rowsAffected + "rows affected");
 	}
@@ -843,7 +834,7 @@ public class Main {
 			while(results.next()) {
 				System.out.println(results.getInt("proj_num") + ", " + results.getString("proj_name") + ", " + results.getString("building_type")
 				+ ", " +results.getString("proj_address") + ", " + results.getInt("erf_num") + ", " + results.getFloat("total_fee") + ", " + results.getFloat("amount_paid_to_date")
-				+ ", " + results.getString("proj_deadline") + ", " + results.getString("proj_manager") + ", " + results.getString("proj_architect") + ", " + results.getString("proj_customer")
+				+ ", " + results.getString("proj_deadline") + ", " + results.getString("proj_contractor") + ", " + results.getString("proj_architect") + ", " + results.getString("proj_customer")
 				+ ", " + results.getString("proj_completion") + ", " + results.getString("proj_completion_date")+ "\n\n"); 
 			}
 	}
@@ -865,7 +856,7 @@ public class Main {
 			while(results.next()) {
 				System.out.println(results.getInt("proj_num") + ", " + results.getString("proj_name") + ", " + results.getString("building_type")
 				+ ", " +results.getString("proj_address") + ", " + results.getInt("erf_num") + ", " + results.getFloat("total_fee") + ", " + results.getFloat("amount_paid_to_date")
-				+ ", " + results.getString("proj_deadline") + ", " + results.getString("proj_manager") + ", " + results.getString("proj_architect") + ", " + results.getString("proj_customer")
+				+ ", " + results.getString("proj_deadline") + ", " + results.getString("proj_contractor") + ", " + results.getString("proj_architect") + ", " + results.getString("proj_customer")
 				+ ", " + results.getString("proj_completion") + ", " + results.getString("proj_completion_date")+ "\n\n"); 
 			}
 			
@@ -890,7 +881,7 @@ public class Main {
 			while(results.next()) {
 				System.out.println(results.getInt("proj_num") + ", " + results.getString("proj_name") + ", " + results.getString("building_type")
 				+ ", " +results.getString("proj_address") + ", " + results.getInt("erf_num") + ", " + results.getFloat("total_fee") + ", " + results.getFloat("amount_paid_to_date")
-				+ ", " + results.getString("proj_deadline") + ", " + results.getString("proj_manager") + ", " + results.getString("proj_architect") + ", " + results.getString("proj_customer")
+				+ ", " + results.getString("proj_deadline") + ", " + results.getString("proj_contractor") + ", " + results.getString("proj_architect") + ", " + results.getString("proj_customer")
 				+ ", " + results.getString("proj_completion") + ", " + results.getString("proj_completion_date")+ "\n\n"); 
 			}
 			
